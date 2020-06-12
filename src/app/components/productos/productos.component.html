@@ -20,7 +20,7 @@
                     <th>Imagen</th>
                 </thead>
                 <tbody>
-                    <tr></tr>
+                    <tr *ngFor="let producto of productos"></tr>
                     <td>{{producto.idProducto}}</td>
                     <td>{{producto.nombreProducto}}</td>
                     <td>{{producto.descripcion}}</td>
