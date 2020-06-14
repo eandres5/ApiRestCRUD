@@ -10,6 +10,7 @@ import { ProductoService } from '../app/services/producto.service';
 import { FilterPipe } from './pipes/filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RouterModule, Routes } from '@angular/router';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    ReactiveFormsModule
   ],
   providers: [ProductoService],
   bootstrap: [AppComponent]

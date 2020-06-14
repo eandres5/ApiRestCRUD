@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { productoI } from '../interfaces/producto';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,9 @@ export class ProductoService {
     private http: HttpClient
   ) { }
 
-  getAllProducts() : Observable<productoI[]>{
-    const path = `${this.api}/getPostsResource.detail.allPosts`;
-    return this.http.get<productoI[]>(path)
+  getAllProducts(){
+    const path = `${this.api}/getPostsResource`;
+    return this.http.get(path).pipe(map((res: Response) => res));
   }
 
   getProduct(idProducto: String, userId: String){
@@ -31,7 +32,7 @@ export class ProductoService {
     return this.http.post(path, producto);
   }
 
-  updateProduct(userId: String,producto: productoI){
+  updateProduct(producto: productoI){
     const path = `${this.api}/updatePostResource/${producto.idProducto}`;
     return this.http.put<productoI>(path, producto);
   }
@@ -40,6 +41,5 @@ export class ProductoService {
     const path = `${this.api}/deletePostResource/${idProducto}`;
     return this.http.delete(path);
   }
-
 
 }

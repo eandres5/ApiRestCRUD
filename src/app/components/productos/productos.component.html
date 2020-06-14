@@ -1,12 +1,12 @@
 <h1>CRUD Productos</h1>
 <div class="row">
     <div class="col">
-      <div class="form-group">
-        <input type="text" class="form-control" name="filterPost" placeholder="Search..." [(ngModel)]="filterPost">
-        <button (click)="getProduct()">buscar</button>
-      </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="filterPost" placeholder="Search..." [(ngModel)]="filterPost">
+            <button (click)="watchProduct()">buscar</button>
+        </div>
     </div>
-  </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -14,22 +14,24 @@
                 <thead>
                     <th>id</th>
                     <th>Producto</th>
-                    <th>Descripción</th>
                     <th>Precio</th>
-                    <th>Fecha Publicación</th>
                     <th>Imagen</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let producto of productos"></tr>
-                    <td>{{producto.idProducto}}</td>
-                    <td>{{producto.nombreProducto}}</td>
-                    <td>{{producto.descripcion}}</td>
-                    <td>{{producto.precio}}</td>
-                    <td>{{producto.date}}</td>
-                    <td>{{producto.allPhotos}}</td>
+                    <!--
+
+                    -->
+                    <tr *ngFor="let item of productos">
+                    <td> {{ item.productData.producto.id }} </td> 
+                    <td> {{ item.productData.producto.nombreProducto }} </td> 
+                    <td> {{ item.productData.producto.precio }} </td>
                     <td>
-                        <button (click)="deleteProduct()">Eliminar</button>
-                        <button (click)="updateProduct()">Editar</button>
+                        <img [src]="item.productData.producto.product_cover_photo" height="100" width="100"/>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="deleteProduct(item.productData.producto.idProducto)">Eliminar</button>
+                        <button type="button" class="btn btn-warning" (click)="updateProduct()">Editar</button>
+                        <button type="button" class="btn btn-info"  (click)="getProduct(item.productData.producto.idProducto, item.productData.producto.userId)">Ver</button>
                     </td>
                 </tbody>
             </table>
@@ -37,23 +39,48 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4 offset-md-2">
+    <div class="col-md-4 offset-md-2" id="formProducto">
         <div class="card">
             <div class="card-body">
-                <form>
+                <form [formGroup]="productForm" (ngSubmit)="createProduct()">
                     <div class="form-group">
-                        <input type="text" name="title" placeholder="Producto" [(ngModel)]="producto.nombreProducto" class="form-control" autofocus>
+                        <input type="text" formControlName="productoF" placeholder="Producto"
+                            [(ngModel)]="producto.nombreProducto" class="form-control" autofocus>
+                        <div class="alert-danger" *ngIf="productoF.invalid && (productoF.dirty || productoF.touched)">
+                            <div class="container-error-message" *ngIf="productoF.errors.required">
+                                Producto es requerido
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <textarea name="description" placeholder="Descripción del Producto" rows="2"  [(ngModel)]="producto.descripcion" class="form-control"></textarea>    
+                        <textarea formControlName="description" placeholder="Descripción del Producto" rows="2"
+                            [(ngModel)]="producto.descripcion" class="form-control"></textarea>
+                        <div class="alert-danger"
+                            *ngIf="description.invalid && (description.dirty || description.touched)">
+                            <div class="container-error-message" *ngIf="description.errors.required">
+                                Es necesaria una descripción del producto
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="title" placeholder="Precio" [(ngModel)]="producto.precio" class="form-control" autofocus>
+                        <input type="number" formControlName="precio" placeholder="Precio" [(ngModel)]="producto.precio"
+                            class="form-control">
+                        <div class="alert-danger" *ngIf="precio.invalid && (precio.dirty || precio.touched)">
+                            <div class="container-error-message" *ngIf="precio.errors.required">
+                                Ingrese el precio del producto
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="url" name="image" placeholder="Imagen" [(ngModel)]="producto.product_cover_photo" class="form-control">
+                        <input type="url" formControlName="image" placeholder="Imagen"
+                            [(ngModel)]="producto.product_cover_photo" class="form-control">
+                        <div class="alert-danger" *ngIf="image.invalid && (image.dirty || image.touched)">
+                            <div class="container-error-message" *ngIf="image.errors.required">
+                                Url de la imagen es necesaria
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn btn-success btn-block" (click)="createProduct()">
+                    <button type="submit" class="btn btn-success btn-block" [disabled]="!productForm.valid">
                         Registrar
                     </button>
                 </form>
